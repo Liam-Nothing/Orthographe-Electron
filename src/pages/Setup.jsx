@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, Key, ArrowRight, Loader2, CheckCircle, AlertCircle, ExternalLink, HelpCircle } from 'lucide-react';
+import { Sparkles, Key, ArrowRight, Loader2, CheckCircle, AlertCircle, HelpCircle } from 'lucide-react';
 import { validateApiKey } from '../services/mistral';
 import Help from './Help';
 
@@ -9,12 +9,6 @@ function Setup({ onComplete }) {
   const [error, setError] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-
-  const openExternal = (url) => {
-    if (window.electronAPI) {
-      window.electronAPI.openExternal(url);
-    }
-  };
 
   const handleValidate = async () => {
     if (!apiKey.trim()) {
@@ -173,22 +167,14 @@ function Setup({ onComplete }) {
             </div>
           </form>
 
-          {/* Help links */}
-          <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
+          {/* Help link */}
+          <div className="mt-6 pt-6 border-t border-white/10">
             <button
               onClick={() => setShowHelp(true)}
               className="w-full flex items-center justify-center gap-2 py-2 text-purple-400 hover:text-purple-300 transition-colors text-sm"
             >
               <HelpCircle className="w-4 h-4" />
               Comment obtenir une clé API ?
-            </button>
-            
-            <button
-              onClick={() => openExternal('https://console.mistral.ai/')}
-              className="w-full flex items-center justify-center gap-2 text-gray-400 hover:text-purple-400 transition-colors text-sm"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Ouvrir console.mistral.ai
             </button>
           </div>
         </div>

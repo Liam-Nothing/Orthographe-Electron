@@ -4,7 +4,11 @@ node_modules/
 # Build outputs
 dist/
 dist-electron/
-build/
+
+# Keep build folder for icons but ignore generated files
+!build/
+build/*
+!build/icon.*
 
 # Environment files
 .env

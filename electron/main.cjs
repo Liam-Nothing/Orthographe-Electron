@@ -236,6 +236,15 @@ function createWindow() {
         version: app.getVersion()
       });
     }
+
+    // Vérifier les mises à jour en production
+    const isDev = !app.isPackaged;
+    if (!isDev) {
+      log.info('Checking for updates...');
+      autoUpdater.checkForUpdates().catch(err => {
+        log.error('Error checking for updates:', err);
+      });
+    }
   });
 
   // Log des erreurs de la console renderer

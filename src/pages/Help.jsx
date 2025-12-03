@@ -61,9 +61,9 @@ function Help({ onBack }) {
     {
       number: 7,
       title: "Coller dans l'application",
-      description: "Retournez sur la page de configuration de l'application et collez votre clé API dans le champ prévu, puis cliquez sur 'Valider'.",
-      placeholder: "screenshot-step7.png",
-      placeholderText: "Capture d'écran du champ de saisie de l'application"
+      description: "Retournez sur la page de configuration de l'application et collez votre clé API dans le champ prévu, puis cliquez sur 'Valider'. C'est terminé !",
+      placeholder: null,
+      placeholderText: null
     }
   ];
 
@@ -148,16 +148,16 @@ function Help({ onBack }) {
                     </button>
                   )}
 
-                  {/* Screenshot placeholder */}
-                  <div className="bg-slate-800/50 border-2 border-dashed border-slate-600 rounded-xl p-8 text-center">
-                    <div className="text-slate-500 mb-2">📷</div>
-                    <p className="text-slate-500 text-sm">
-                      {step.placeholderText}
-                    </p>
-                    <p className="text-slate-600 text-xs mt-2">
-                      Placeholder: public/{step.placeholder}
-                    </p>
-                  </div>
+                  {/* Screenshot */}
+                  {step.placeholder && (
+                    <div className="rounded-xl overflow-hidden border border-slate-700">
+                      <img 
+                        src={`/${step.placeholder}`}
+                        alt={step.placeholderText}
+                        className="w-full h-auto"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

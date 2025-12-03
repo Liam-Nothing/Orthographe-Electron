@@ -12,6 +12,7 @@ function App() {
   const [isConfigured, setIsConfigured] = useState(null); // null = loading
   const [currentPage, setCurrentPage] = useState('home');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
 
   useEffect(() => {
     checkConfiguration();
@@ -19,7 +20,12 @@ function App() {
     // Écouter les changements de navigation depuis le menu
     if (window.electronAPI) {
       const cleanup = window.electronAPI.onNavigateTo((page) => {
-        setCurrentPage(page);
+        if (page === 'debug') {
+          setShowDebug(true);
+        } else {
+          setShowDebug(false);
+          setCurrentPage(page);
+        }
       });
       
       return () => cleanup && cleanup();
@@ -39,6 +45,15 @@ function App() {
   const handleSetupComplete = () => {
     setIsConfigured(true);
   };
+
+  // Page Debug accessible à tout moment (indépendante)
+  if (showDebug) {
+    return (
+      <div className="h-screen bg-slate-900 overflow-y-auto">
+        <Debug onClose={() => setShowDebug(false)} />
+      </div>
+    );
+  }
 
   // Loading state
   if (isConfigured === null) {
@@ -68,8 +83,6 @@ function App() {
         return <Categories />;
       case 'settings':
         return <Settings />;
-      case 'debug':
-        return <Debug />;
       case 'home':
       default:
         return <Home />;

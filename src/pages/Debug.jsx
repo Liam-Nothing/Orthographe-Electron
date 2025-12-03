@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Bug, RefreshCw, Download, CheckCircle, AlertCircle, Info, Trash2, FolderOpen, Tag, ExternalLink, Clock } from 'lucide-react';
+import { Bug, RefreshCw, Download, CheckCircle, AlertCircle, Info, Trash2, FolderOpen, Tag, ExternalLink, Clock, X } from 'lucide-react';
 
-function Debug() {
+function Debug({ onClose }) {
   const [appInfo, setAppInfo] = useState({
     version: 'N/A',
     isPackaged: false,
@@ -220,15 +220,29 @@ function Debug() {
     <div className="flex-1 p-8 overflow-y-auto">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
-            <Bug className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+              <Bug className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Debug & Diagnostics</h1>
+              <p className="text-slate-400">Informations système, mises à jour et releases</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Debug & Diagnostics</h1>
-            <p className="text-slate-400">Informations système, mises à jour et releases</p>
-          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+              title="Fermer (Appuyez sur Alt pour afficher le menu)"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          )}
         </div>
+        <p className="text-xs text-slate-500 mt-2">
+          💡 Appuyez sur <kbd className="px-1.5 py-0.5 bg-slate-700 rounded text-slate-300">Alt</kbd> pour afficher/masquer le menu
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

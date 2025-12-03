@@ -140,16 +140,6 @@ function createMenu() {
               mainWindow.webContents.send('navigate-to', 'settings');
             }
           }
-        },
-        { type: 'separator' },
-        {
-          label: 'Debug',
-          accelerator: 'Ctrl+D',
-          click: () => {
-            if (mainWindow) {
-              mainWindow.webContents.send('navigate-to', 'debug');
-            }
-          }
         }
       ]
     },
@@ -185,6 +175,36 @@ function createMenu() {
           }
         }
       ]
+    },
+    {
+      label: '🔧 Debug',
+      submenu: [
+        {
+          label: 'Ouvrir Debug',
+          accelerator: 'Ctrl+D',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate-to', 'debug');
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Vérifier les mises à jour',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate-to', 'debug');
+            }
+          }
+        },
+        {
+          label: 'Voir les releases GitHub',
+          click: () => {
+            const { shell } = require('electron');
+            shell.openExternal('https://github.com/Liam-Nothing/Orthographe-Electron/releases');
+          }
+        }
+      ]
     }
   ];
 
@@ -201,7 +221,7 @@ function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    autoHideMenuBar: false,
+    autoHideMenuBar: true, // Menu caché, appuyer sur Alt pour l'afficher
     show: false, // Ne pas afficher tant que pas prêt
     backgroundColor: '#0f172a', // Couleur de fond pendant le chargement
     webPreferences: {

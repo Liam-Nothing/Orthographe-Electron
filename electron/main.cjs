@@ -180,11 +180,13 @@ function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
+    show: false, // Ne pas afficher tant que pas prêt
+    backgroundColor: '#0f172a', // Couleur de fond pendant le chargement
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: true,
+      sandbox: false, // Désactivé pour permettre electron-store
       preload: path.join(__dirname, 'preload.cjs'),
       devTools: true,
       webSecurity: true,
@@ -195,15 +197,25 @@ function createWindow() {
   const forceProduction = process.env.NODE_ENV === 'production';
 
   if (isDev && !forceProduction) {
+    log.info('Loading dev server at http://localhost:5173');
     mainWindow.loadURL('http://localhost:5173');
+    
+    // Toujours ouvrir DevTools en dev
     mainWindow.webContents.openDevTools();
+    
+    // Log des erreurs de chargement
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+      log.error('Failed to load:', errorCode, errorDescription);
+    });
   } else {
     const distPath = path.join(__dirname, '../dist/index.html');
     log.info('Loading from dist:', distPath);
     mainWindow.loadFile(distPath);
   }
 
-  mainWindow.once('ready-to-show', () => {
+  // Afficher la fenêtre quand le contenu est chargé
+  mainWindow.webContents.on('did-finish-load', () => {
+    log.info('Content loaded successfully');
     mainWindow.show();
     
     // Envoyer l'état de configuration au renderer
@@ -212,6 +224,13 @@ function createWindow() {
         isConfigured: store.get('isConfigured'),
         version: app.getVersion()
       });
+    }
+  });
+
+  // Log des erreurs de la console renderer
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    if (level >= 2) { // Warnings et erreurs
+      log.warn(`[Renderer] ${message}`);
     }
   });
 }

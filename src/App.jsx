@@ -10,6 +10,7 @@ import Sidebar from './components/Sidebar';
 function App() {
   const [isConfigured, setIsConfigured] = useState(null); // null = loading
   const [currentPage, setCurrentPage] = useState('home');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     checkConfiguration();
@@ -74,7 +75,12 @@ function App() {
 
   return (
     <div className="h-screen bg-slate-900 flex overflow-hidden">
-      <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Sidebar 
+        currentPage={currentPage} 
+        onNavigate={setCurrentPage}
+        isCollapsed={isSidebarCollapsed}
+        onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+      />
       <main className="flex-1 flex flex-col overflow-y-auto">
         {renderPage()}
       </main>

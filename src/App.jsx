@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import History from './pages/History';
 import Categories from './pages/Categories';
 import Settings from './pages/Settings';
+import Debug from './pages/Debug';
 import Sidebar from './components/Sidebar';
 
 function App() {
@@ -67,6 +68,8 @@ function App() {
         return <Categories />;
       case 'settings':
         return <Settings />;
+      case 'debug':
+        return <Debug />;
       case 'home':
       default:
         return <Home />;

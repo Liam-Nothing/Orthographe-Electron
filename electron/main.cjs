@@ -140,6 +140,16 @@ function createMenu() {
               mainWindow.webContents.send('navigate-to', 'settings');
             }
           }
+        },
+        { type: 'separator' },
+        {
+          label: 'Debug',
+          accelerator: 'Ctrl+D',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate-to', 'debug');
+            }
+          }
         }
       ]
     },
@@ -405,6 +415,80 @@ function setupIpcHandlers() {
       return { success: true };
     }
     return { success: false, error: 'URL invalide' };
+  });
+
+  // Vérifier les mises à jour manuellement
+  ipcMain.handle('check-for-updates', async () => {
+    const isDev = !app.isPackaged;
+    if (isDev) {
+      log.info('Auto-update disabled in dev mode');
+      return { success: false, error: 'Auto-update désactivé en mode développement' };
+    }
+    
+    try {
+      log.info('Manual update check triggered');
+      await autoUpdater.checkForUpdates();
+      return { success: true };
+    } catch (error) {
+      log.error('Error checking for updates:', error);
+      return { success: false, error: error.message };
+    }
+  });
+
+  // Récupérer les infos de l'application
+  ipcMain.handle('get-app-info', async () => {
+    return {
+      version: app.getVersion(),
+      isPackaged: app.isPackaged,
+      platform: process.platform,
+      arch: process.arch,
+      nodeVersion: process.versions.node,
+      electronVersion: process.versions.electron
+    };
+  });
+
+  // Récupérer les releases GitHub
+  ipcMain.handle('get-github-releases', async () => {
+    try {
+      const https = require('https');
+      
+      return new Promise((resolve, reject) => {
+        const options = {
+          hostname: 'api.github.com',
+          path: '/repos/Liam-Nothing/Orthographe-Electron/releases',
+          method: 'GET',
+          headers: {
+            'User-Agent': 'Orthographe-Mistral-App'
+          }
+        };
+
+        const req = https.request(options, (res) => {
+          let data = '';
+          res.on('data', chunk => data += chunk);
+          res.on('end', () => {
+            try {
+              const releases = JSON.parse(data);
+              resolve(releases.slice(0, 10).map(r => ({
+                version: r.tag_name,
+                name: r.name,
+                published: r.published_at,
+                prerelease: r.prerelease,
+                body: r.body,
+                url: r.html_url
+              })));
+            } catch (e) {
+              reject(e);
+            }
+          });
+        });
+
+        req.on('error', reject);
+        req.end();
+      });
+    } catch (error) {
+      log.error('Error fetching releases:', error);
+      return [];
+    }
   });
 
   // Sauvegarder le brouillon

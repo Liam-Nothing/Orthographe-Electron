@@ -54,7 +54,8 @@ const storeDefaults = {
     totalErrors: 0,
     errorTypes: {}
   },
-  draftText: ''
+  draftText: '',
+  draftResult: null
 };
 
 // --- INITIALISATION DU STORE (async pour ES module) ---
@@ -138,7 +139,7 @@ function createMenu() {
       submenu: [
         {
           label: 'Outils de développement',
-          accelerator: 'F12',
+          accelerator: 'CmdOrCtrl+Shift+I',
           click: () => {
             if (mainWindow) {
               mainWindow.webContents.toggleDevTools();
@@ -147,7 +148,7 @@ function createMenu() {
         },
         {
           label: 'Recharger',
-          accelerator: 'Ctrl+R',
+          accelerator: 'CmdOrCtrl+R',
           click: () => {
             if (mainWindow) {
               mainWindow.reload();
@@ -397,6 +398,17 @@ function setupIpcHandlers() {
   // Récupérer le brouillon
   ipcMain.handle('get-draft', async () => {
     return store.get('draftText') || '';
+  });
+
+  // Sauvegarder le résultat de correction
+  ipcMain.handle('save-draft-result', async (event, result) => {
+    store.set('draftResult', result);
+    return { success: true };
+  });
+
+  // Récupérer le résultat de correction
+  ipcMain.handle('get-draft-result', async () => {
+    return store.get('draftResult');
   });
 }
 

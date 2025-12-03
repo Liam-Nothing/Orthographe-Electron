@@ -31,6 +31,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // === DRAFT (texte en cours) ===
   saveDraft: (text) => ipcRenderer.invoke('save-draft', text),
   getDraft: () => ipcRenderer.invoke('get-draft'),
+  saveDraftResult: (result) => ipcRenderer.invoke('save-draft-result', result),
+  getDraftResult: () => ipcRenderer.invoke('get-draft-result'),
   
   // === ÉVÉNEMENTS ===
   onNavigateTo: (callback) => {

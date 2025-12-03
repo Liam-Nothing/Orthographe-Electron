@@ -26,11 +26,12 @@ function Home() {
 
   const loadData = async () => {
     if (window.electronAPI) {
-      const [cats, key, mdl, draft] = await Promise.all([
+      const [cats, key, mdl, draft, draftResult] = await Promise.all([
         window.electronAPI.getCategories(),
         window.electronAPI.getApiKey(),
         window.electronAPI.getModel(),
-        window.electronAPI.getDraft()
+        window.electronAPI.getDraft(),
+        window.electronAPI.getDraftResult()
       ]);
       setCategories(cats.filter(c => c.enabled));
       setApiKey(key);
@@ -39,6 +40,11 @@ function Home() {
       // Charger le brouillon sauvegardé
       if (draft) {
         setText(draft);
+      }
+      
+      // Charger le résultat sauvegardé
+      if (draftResult) {
+        setResult(draftResult);
       }
       
       // Sélectionner la première catégorie par défaut
@@ -69,6 +75,11 @@ function Home() {
     try {
       const correctionResult = await correctText(text, selectedCategory, apiKey, model);
       setResult(correctionResult);
+
+      // Sauvegarder le résultat pour persistance
+      if (window.electronAPI) {
+        window.electronAPI.saveDraftResult(correctionResult);
+      }
 
       // Sauvegarder dans l'historique
       if (window.electronAPI && correctionResult.mistakes.length > 0) {
@@ -104,6 +115,7 @@ function Home() {
     setError('');
     if (window.electronAPI) {
       window.electronAPI.saveDraft('');
+      window.electronAPI.saveDraftResult(null);
     }
   };
 

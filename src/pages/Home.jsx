@@ -184,7 +184,7 @@ function Home() {
               <button
                 onClick={handleCorrect}
                 disabled={isLoading || !text.trim()}
-                className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-slate-600 disabled:to-slate-600 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20"
+                className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-slate-600 disabled:to-slate-600 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed shadow-lg shadow-purple-500/20 disabled:shadow-none"
               >
                 {isLoading ? (
                   <>

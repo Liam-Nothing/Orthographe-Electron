@@ -1,0 +1,107 @@
+{
+  "name": "orthographe-mistral",
+  "version": "1.0.0",
+  "description": "Application de correction orthographique intelligente avec Mistral AI - Analyse et amélioration de l'écriture",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently \"cross-env BROWSER=none npm run react:dev\" \"wait-on http://localhost:5173 && npm run electron:dev\"",
+    "react:dev": "vite",
+    "electron:dev": "electron .",
+    "build": "vite build",
+    "build:electron": "vite build && electron-builder --publish always",
+    "build:check": "npm run lint && npm run build",
+    "preview": "vite preview",
+    "start:prod": "npm run build && cross-env NODE_ENV=production electron .",
+    "lint": "eslint src/ --ext .js,.jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src/ --ext .js,.jsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,css}\"",
+    "precommit": "npm run build:check",
+    "commit": "node scripts/commit-with-check.js",
+    "setup-hooks": "node scripts/setup-git-hooks.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Liam-Nothing/Orthographe-Electron.git"
+  },
+  "build": {
+    "appId": "com.liamnothing.orthographe-mistral",
+    "productName": "Orthographe Mistral",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*.cjs",
+      "package.json",
+      "config.default.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "releaseInfo": {
+      "releaseName": "v${version}"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Liam-Nothing",
+        "repo": "Orthographe-Electron",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "mistral-ai",
+    "orthographe",
+    "correction",
+    "spelling",
+    "grammar",
+    "writing-assistant",
+    "tailwindcss",
+    "vite",
+    "desktop-app"
+  ],
+  "author": "Liam-Nothing",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^30.0.1",
+    "electron-builder": "^24.13.3",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.7.2",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.8",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^1.0.0",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "electron-log": "^5.1.2",
+    "electron-updater": "^6.1.8",
+    "lucide-react": "^0.460.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.0.0",
+    "recharts": "^2.13.0",
+    "uuid": "^10.0.0"
+  }
+}

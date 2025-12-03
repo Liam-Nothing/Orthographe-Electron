@@ -1,0 +1,36 @@
+{
+  "TITLE": "Orthographe Mistral",
+  "MISTRAL_API_KEY": "",
+  "MISTRAL_MODEL": "mistral-large-latest",
+  "GITHUB_TOKEN": "",
+  "DEFAULT_CATEGORIES": [
+    {
+      "id": "email",
+      "name": "Email",
+      "icon": "Mail",
+      "enabled": true,
+      "preprompt": "Tu es un assistant spécialisé dans la correction d'emails professionnels. Corrige l'orthographe, la grammaire et améliore la formulation pour un contexte professionnel. Assure-toi que le ton est approprié pour une communication par email."
+    },
+    {
+      "id": "academic",
+      "name": "Académique",
+      "icon": "GraduationCap",
+      "enabled": true,
+      "preprompt": "Tu es un assistant spécialisé dans la correction de textes académiques. Corrige l'orthographe et la grammaire tout en maintenant un style académique formel. Vérifie la cohérence et la clarté des arguments."
+    },
+    {
+      "id": "casual",
+      "name": "Informel",
+      "icon": "MessageCircle",
+      "enabled": true,
+      "preprompt": "Tu es un assistant pour la correction de textes informels (messages, réseaux sociaux, etc.). Corrige les fautes d'orthographe tout en préservant le ton décontracté et le style personnel de l'auteur."
+    },
+    {
+      "id": "professional",
+      "name": "Professionnel",
+      "icon": "Briefcase",
+      "enabled": true,
+      "preprompt": "Tu es un assistant pour la correction de documents professionnels (rapports, présentations, etc.). Corrige l'orthographe et la grammaire, améliore la clarté et assure un ton professionnel approprié."
+    }
+  ]
+}

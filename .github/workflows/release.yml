@@ -1,0 +1,38 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - master # Changez ceci si votre branche principale s'appelle 'main'
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Build du frontend (React/Vite)
+      - name: Build React
+        run: npm run build
+
+      # Build et Release Electron
+      # GITHUB_TOKEN est automatiquement fourni par GitHub Actions (pas besoin de le configurer)
+      - name: Build & Publish Electron App
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build:electron
+

@@ -152,12 +152,12 @@ function Dashboard() {
               <div className="p-2 bg-green-500/20 rounded-lg">
                 <CheckCircle className="w-5 h-5 text-green-400" />
               </div>
-              <span className="text-slate-400 text-sm">Taux de réussite</span>
+              <span className="text-slate-400 text-sm">Moy. fautes/texte</span>
             </div>
             <p className="text-3xl font-bold text-white">
               {statistics?.totalCorrections > 0
-                ? `${Math.round((1 - statistics.totalErrors / (statistics.totalCorrections * 10)) * 100)}%`
-                : 'N/A'}
+                ? (statistics.totalErrors / statistics.totalCorrections).toFixed(1)
+                : '0'}
             </p>
           </div>
           

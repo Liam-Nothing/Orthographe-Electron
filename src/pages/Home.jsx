@@ -137,8 +137,8 @@ function Home() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-8 overflow-auto">
-        <div className="grid grid-cols-2 gap-6 h-full">
+      <div className="flex-1 p-8 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-6 min-h-full">
           {/* Input section */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-slate-400 mb-2">
@@ -148,7 +148,7 @@ function Home() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Collez ou tapez votre texte ici..."
-              className="flex-1 w-full p-4 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
+              className="min-h-[200px] w-full p-4 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 resize-y focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
             />
             
             <div className="flex gap-3 mt-4">
@@ -195,7 +195,7 @@ function Home() {
             </label>
             
             {result ? (
-              <div className="flex-1 flex flex-col gap-4 overflow-auto">
+              <div className="flex flex-col gap-4">
                 {/* Corrected text */}
                 <div className="relative p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
                   <button
@@ -214,7 +214,7 @@ function Home() {
 
                 {/* Mistakes list */}
                 {result.mistakes.length > 0 && (
-                  <div className="flex-1 overflow-auto">
+                  <div>
                     <h3 className="text-sm font-medium text-slate-400 mb-3 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4" />
                       {result.mistakes.length} faute{result.mistakes.length > 1 ? 's' : ''} détectée{result.mistakes.length > 1 ? 's' : ''}
@@ -226,7 +226,7 @@ function Home() {
                           key={index}
                           className="p-4 bg-slate-800/30 border border-slate-700/50 rounded-xl"
                         >
-                          <div className="flex items-center gap-3 mb-2">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
                             <span className={`px-2 py-1 text-xs font-medium rounded-lg border ${getMistakeTypeColor(mistake.type)}`}>
                               {mistake.type}
                             </span>
@@ -251,7 +251,7 @@ function Home() {
                 )}
 
                 {result.mistakes.length === 0 && (
-                  <div className="flex-1 flex items-center justify-center">
+                  <div className="py-12 flex items-center justify-center">
                     <div className="text-center">
                       <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-3" />
                       <p className="text-slate-300 font-medium">Aucune faute détectée !</p>
@@ -261,7 +261,7 @@ function Home() {
                 )}
               </div>
             ) : (
-              <div className="flex-1 flex items-center justify-center bg-slate-800/30 border border-slate-700/50 rounded-xl border-dashed">
+              <div className="min-h-[200px] flex items-center justify-center bg-slate-800/30 border border-slate-700/50 rounded-xl border-dashed">
                 <div className="text-center text-slate-500">
                   <Send className="w-8 h-8 mx-auto mb-3 opacity-50" />
                   <p>Le texte corrigé apparaîtra ici</p>

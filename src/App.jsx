@@ -7,6 +7,7 @@ import Categories from './pages/Categories';
 import Settings from './pages/Settings';
 import Debug from './pages/Debug';
 import Sidebar from './components/Sidebar';
+import UpdateNotification from './components/UpdateNotification';
 
 function App() {
   const [isConfigured, setIsConfigured] = useState(null); // null = loading
@@ -90,7 +91,8 @@ function App() {
   };
 
   return (
-    <div className="h-screen bg-slate-900 flex overflow-hidden">
+    <div className="h-screen bg-slate-900 flex overflow-hidden relative">
+      <UpdateNotification />
       <Sidebar 
         currentPage={currentPage} 
         onNavigate={setCurrentPage}

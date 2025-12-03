@@ -8,6 +8,8 @@ export default defineConfig({
       jsxRuntime: 'automatic'
     })
   ],
+  // Base path relatif pour Electron en production
+  base: './',
   server: {
     port: 5173,
     strictPort: true
@@ -17,4 +19,3 @@ export default defineConfig({
     emptyOutDir: true
   }
 });
-

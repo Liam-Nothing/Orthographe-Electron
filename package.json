@@ -1,6 +1,6 @@
 {
   "name": "orthographe-mistral",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Application de correction orthographique intelligente avec Mistral AI - Analyse et amélioration de l'écriture",
   "type": "module",
   "main": "electron/main.cjs",

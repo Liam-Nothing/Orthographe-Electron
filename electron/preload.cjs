@@ -2,27 +2,40 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 // Exposer une API sécurisée au renderer
 contextBridge.exposeInMainWorld('electronAPI', {
-  // Invocations IPC (requêtes)
-  getDebugInfo: () => ipcRenderer.invoke('get-debug-info'),
-  getGitHubReleases: () => ipcRenderer.invoke('get-github-releases'),
+  // === CONFIGURATION ===
+  checkConfig: () => ipcRenderer.invoke('check-config'),
+  saveApiKey: (apiKey) => ipcRenderer.invoke('save-api-key', apiKey),
+  getApiKey: () => ipcRenderer.invoke('get-api-key'),
+  getModel: () => ipcRenderer.invoke('get-model'),
+  saveModel: (model) => ipcRenderer.invoke('save-model', model),
   
-  // Écouteurs d'événements (avec cleanup)
-  onEnvVariables: (callback) => {
-    const subscription = (event, data) => callback(data);
-    ipcRenderer.on('env-variables', subscription);
-    return () => ipcRenderer.removeListener('env-variables', subscription);
-  },
+  // === CATÉGORIES ===
+  getCategories: () => ipcRenderer.invoke('get-categories'),
+  saveCategories: (categories) => ipcRenderer.invoke('save-categories', categories),
+  addCategory: (category) => ipcRenderer.invoke('add-category', category),
+  deleteCategory: (categoryId) => ipcRenderer.invoke('delete-category', categoryId),
+  updateCategory: (category) => ipcRenderer.invoke('update-category', category),
   
-  onUpdateDebug: (callback) => {
-    const subscription = (event, data) => callback(data);
-    ipcRenderer.on('update-debug', subscription);
-    return () => ipcRenderer.removeListener('update-debug', subscription);
-  },
+  // === HISTORIQUE & STATISTIQUES ===
+  getErrorHistory: () => ipcRenderer.invoke('get-error-history'),
+  addCorrection: (correction) => ipcRenderer.invoke('add-correction', correction),
+  getStatistics: () => ipcRenderer.invoke('get-statistics'),
   
+  // === DONNÉES ===
+  resetData: (options) => ipcRenderer.invoke('reset-data', options),
+  exportData: () => ipcRenderer.invoke('export-data'),
+  
+  // === ÉVÉNEMENTS ===
   onNavigateTo: (callback) => {
     const subscription = (event, page) => callback(page);
     ipcRenderer.on('navigate-to', subscription);
     return () => ipcRenderer.removeListener('navigate-to', subscription);
+  },
+  
+  onConfigStatus: (callback) => {
+    const subscription = (event, data) => callback(data);
+    ipcRenderer.on('config-status', subscription);
+    return () => ipcRenderer.removeListener('config-status', subscription);
   },
   
   onUpdateAvailable: (callback) => {
@@ -44,6 +57,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
   }
 });
 
-// Log pour confirmer que le preload est chargé
-console.log('[Preload] Electron API exposed securely');
-
+console.log('[Preload] Orthographe Mistral API exposed');

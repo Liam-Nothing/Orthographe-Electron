@@ -28,34 +28,41 @@ function Help({ onBack }) {
     },
     {
       number: 3,
-      title: "Accéder aux API Keys",
-      description: "Une fois connecté, cliquez sur 'API Keys' dans le menu de gauche ou accédez directement à la page des clés API.",
-      action: {
-        label: "Page API Keys",
-        url: "https://console.mistral.ai/api-keys/"
-      },
+      title: "Choisir un plan",
+      description: "Mistral vous propose différents plans d'abonnement. Sélectionnez celui qui vous convient.",
       placeholder: "screenshot-step3.png",
-      placeholderText: "Capture d'écran du menu avec 'API Keys' surligné"
+      placeholderText: "Capture d'écran de la page de sélection des plans"
     },
     {
       number: 4,
-      title: "Créer une nouvelle clé",
-      description: "Cliquez sur le bouton 'Create new key' pour générer une nouvelle clé API. Donnez-lui un nom descriptif comme 'Orthographe App'.",
+      title: "Sélectionner le plan gratuit",
+      description: "Cliquez sur le plan gratuit ('Free' ou 'Experiment') pour commencer sans frais. Ce plan est suffisant pour un usage personnel.",
       placeholder: "screenshot-step4.png",
-      placeholderText: "Capture d'écran du bouton 'Create new key'"
+      placeholderText: "Capture d'écran montrant le plan gratuit à sélectionner"
     },
     {
       number: 5,
-      title: "Copier votre clé API",
-      description: "⚠️ IMPORTANT : Copiez immédiatement votre clé API et gardez-la en sécurité. Elle ne sera plus visible après cette étape !",
+      title: "Vérifier votre numéro de téléphone",
+      description: "Pour des raisons de sécurité, Mistral demande de vérifier votre numéro de téléphone. Entrez votre numéro et validez avec le code reçu par SMS.",
       placeholder: "screenshot-step5.png",
-      placeholderText: "Capture d'écran montrant la clé API à copier"
+      placeholderText: "Capture d'écran de la vérification du téléphone"
     },
     {
       number: 6,
+      title: "Créer et copier votre clé API",
+      description: "Accédez au dashboard API, cliquez sur 'Créer une nouvelle clé', renseignez un nom (ex: 'Orthographe App'), puis copiez immédiatement la clé générée. ⚠️ Elle ne sera plus visible après !",
+      action: {
+        label: "Ouvrir le dashboard API",
+        url: "https://console.mistral.ai/api-keys/"
+      },
+      placeholder: "screenshot-step6.png",
+      placeholderText: "Capture d'écran du dashboard API et de la création de clé"
+    },
+    {
+      number: 7,
       title: "Coller dans l'application",
       description: "Retournez sur la page de configuration de l'application et collez votre clé API dans le champ prévu, puis cliquez sur 'Valider'.",
-      placeholder: "screenshot-step6.png",
+      placeholder: "screenshot-step7.png",
       placeholderText: "Capture d'écran du champ de saisie de l'application"
     }
   ];

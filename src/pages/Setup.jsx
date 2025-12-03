@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { Sparkles, Key, ArrowRight, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
+import { Sparkles, Key, ArrowRight, Loader2, CheckCircle, AlertCircle, ExternalLink, HelpCircle } from 'lucide-react';
 import { validateApiKey } from '../services/mistral';
+import Help from './Help';
 
 function Setup({ onComplete }) {
   const [apiKey, setApiKey] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [error, setError] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
+  const openExternal = (url) => {
+    if (window.electronAPI) {
+      window.electronAPI.openExternal(url);
+    }
+  };
 
   const handleValidate = async () => {
     if (!apiKey.trim()) {
@@ -48,6 +56,11 @@ function Setup({ onComplete }) {
       }
     }
   };
+
+  // Afficher la page d'aide
+  if (showHelp) {
+    return <Help onBack={() => setShowHelp(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-6">
@@ -160,17 +173,23 @@ function Setup({ onComplete }) {
             </div>
           </form>
 
-          {/* Help link */}
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <a
-              href="https://console.mistral.ai/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-gray-400 hover:text-purple-400 transition-colors text-sm"
+          {/* Help links */}
+          <div className="mt-6 pt-6 border-t border-white/10 space-y-3">
+            <button
+              onClick={() => setShowHelp(true)}
+              className="w-full flex items-center justify-center gap-2 py-2 text-purple-400 hover:text-purple-300 transition-colors text-sm"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Comment obtenir une clé API ?
+            </button>
+            
+            <button
+              onClick={() => openExternal('https://console.mistral.ai/')}
+              className="w-full flex items-center justify-center gap-2 text-gray-400 hover:text-purple-400 transition-colors text-sm"
             >
               <ExternalLink className="w-4 h-4" />
-              Obtenir une clé API sur console.mistral.ai
-            </a>
+              Ouvrir console.mistral.ai
+            </button>
           </div>
         </div>
 
@@ -193,4 +212,3 @@ function Setup({ onComplete }) {
 }
 
 export default Setup;
-

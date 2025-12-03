@@ -28,6 +28,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // === UTILITAIRES ===
   openExternal: (url) => ipcRenderer.invoke('open-external', url),
   
+  // === DRAFT (texte en cours) ===
+  saveDraft: (text) => ipcRenderer.invoke('save-draft', text),
+  getDraft: () => ipcRenderer.invoke('get-draft'),
+  
   // === ÉVÉNEMENTS ===
   onNavigateTo: (callback) => {
     const subscription = (event, page) => callback(page);

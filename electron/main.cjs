@@ -53,7 +53,8 @@ const storeDefaults = {
     totalCorrections: 0,
     totalErrors: 0,
     errorTypes: {}
-  }
+  },
+  draftText: ''
 };
 
 // --- INITIALISATION DU STORE (async pour ES module) ---
@@ -385,6 +386,17 @@ function setupIpcHandlers() {
       return { success: true };
     }
     return { success: false, error: 'URL invalide' };
+  });
+
+  // Sauvegarder le brouillon
+  ipcMain.handle('save-draft', async (event, text) => {
+    store.set('draftText', text || '');
+    return { success: true };
+  });
+
+  // Récupérer le brouillon
+  ipcMain.handle('get-draft', async () => {
+    return store.get('draftText') || '';
   });
 }
 

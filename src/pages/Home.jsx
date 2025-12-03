@@ -26,19 +26,33 @@ function Home() {
 
   const loadData = async () => {
     if (window.electronAPI) {
-      const [cats, key, mdl] = await Promise.all([
+      const [cats, key, mdl, draft] = await Promise.all([
         window.electronAPI.getCategories(),
         window.electronAPI.getApiKey(),
-        window.electronAPI.getModel()
+        window.electronAPI.getModel(),
+        window.electronAPI.getDraft()
       ]);
       setCategories(cats.filter(c => c.enabled));
       setApiKey(key);
       setModel(mdl);
       
+      // Charger le brouillon sauvegardé
+      if (draft) {
+        setText(draft);
+      }
+      
       // Sélectionner la première catégorie par défaut
       if (cats.length > 0 && !selectedCategory) {
         setSelectedCategory(cats.find(c => c.enabled) || cats[0]);
       }
+    }
+  };
+
+  // Sauvegarder le brouillon quand le texte change
+  const handleTextChange = (newText) => {
+    setText(newText);
+    if (window.electronAPI) {
+      window.electronAPI.saveDraft(newText);
     }
   };
 
@@ -88,6 +102,9 @@ function Home() {
     setText('');
     setResult(null);
     setError('');
+    if (window.electronAPI) {
+      window.electronAPI.saveDraft('');
+    }
   };
 
   const getMistakeTypeColor = (type) => {
@@ -146,7 +163,7 @@ function Home() {
             </label>
             <textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => handleTextChange(e.target.value)}
               placeholder="Collez ou tapez votre texte ici..."
               className="min-h-[200px] w-full p-4 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 resize-y focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
             />

@@ -56,11 +56,9 @@ function Sidebar({ currentPage, onNavigate }) {
           <p className="text-sm text-slate-300 font-medium">Mistral AI</p>
         </div>
         
-        <a 
-          href="https://nothingelse.app" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-800/50 transition-colors group"
+        <button 
+          onClick={() => window.electronAPI?.openExternal('https://nothingelse.app')}
+          className="w-full flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-800/50 transition-colors group text-left"
         >
           <img 
             src="/nea-logo.png" 
@@ -72,7 +70,7 @@ function Sidebar({ currentPage, onNavigate }) {
             <p className="text-sm text-slate-400 group-hover:text-purple-400 transition-colors">NothingElse.App</p>
           </div>
           <ExternalLink className="w-3 h-3 text-slate-600 group-hover:text-purple-400 transition-colors" />
-        </a>
+        </button>
       </div>
     </aside>
   );

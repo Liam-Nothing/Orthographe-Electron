@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
@@ -376,6 +376,15 @@ function setupIpcHandlers() {
       statistics: store.get('statistics'),
       categories: store.get('categories')
     };
+  });
+
+  // Ouvrir un lien dans le navigateur externe
+  ipcMain.handle('open-external', async (event, url) => {
+    if (url && (url.startsWith('https://') || url.startsWith('http://'))) {
+      await shell.openExternal(url);
+      return { success: true };
+    }
+    return { success: false, error: 'URL invalide' };
   });
 }
 

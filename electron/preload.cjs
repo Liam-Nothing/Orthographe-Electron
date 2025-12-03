@@ -25,6 +25,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   resetData: (options) => ipcRenderer.invoke('reset-data', options),
   exportData: () => ipcRenderer.invoke('export-data'),
   
+  // === UTILITAIRES ===
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+  
   // === ÉVÉNEMENTS ===
   onNavigateTo: (callback) => {
     const subscription = (event, page) => callback(page);

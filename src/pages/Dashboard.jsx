@@ -185,7 +185,8 @@ function Dashboard() {
                   <YAxis stroke="#94a3b8" />
                   <Tooltip
                     contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
-                    labelStyle={{ color: '#fff' }}
+                    itemStyle={{ color: '#f1f5f9' }}
+                    labelStyle={{ color: '#f1f5f9' }}
                   />
                   <Line type="monotone" dataKey="corrections" stroke="#8b5cf6" strokeWidth={2} name="Corrections" />
                   <Line type="monotone" dataKey="erreurs" stroke="#ef4444" strokeWidth={2} name="Erreurs" />
@@ -216,6 +217,8 @@ function Dashboard() {
                     </Pie>
                     <Tooltip
                       contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                      itemStyle={{ color: '#f1f5f9' }}
+                      labelStyle={{ color: '#f1f5f9' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -281,6 +284,8 @@ function Dashboard() {
                     <YAxis dataKey="name" type="category" stroke="#94a3b8" width={100} />
                     <Tooltip
                       contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                      itemStyle={{ color: '#f1f5f9' }}
+                      labelStyle={{ color: '#f1f5f9' }}
                     />
                     <Bar dataKey="value" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
                   </BarChart>

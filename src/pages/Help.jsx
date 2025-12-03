@@ -21,34 +21,41 @@ function Help({ onBack }) {
     },
     {
       number: 2,
+      title: "Donner un nom à votre équipe",
+      description: "Après l'inscription, Mistral vous demande de créer une équipe. Entrez un nom (par exemple votre prénom ou 'Personnel') et validez.",
+      placeholder: "screenshot-step2.png",
+      placeholderText: "Capture d'écran de la page de création d'équipe"
+    },
+    {
+      number: 3,
       title: "Accéder aux API Keys",
       description: "Une fois connecté, cliquez sur 'API Keys' dans le menu de gauche ou accédez directement à la page des clés API.",
       action: {
         label: "Page API Keys",
         url: "https://console.mistral.ai/api-keys/"
       },
-      placeholder: "screenshot-step2.png",
+      placeholder: "screenshot-step3.png",
       placeholderText: "Capture d'écran du menu avec 'API Keys' surligné"
     },
     {
-      number: 3,
+      number: 4,
       title: "Créer une nouvelle clé",
       description: "Cliquez sur le bouton 'Create new key' pour générer une nouvelle clé API. Donnez-lui un nom descriptif comme 'Orthographe App'.",
-      placeholder: "screenshot-step3.png",
+      placeholder: "screenshot-step4.png",
       placeholderText: "Capture d'écran du bouton 'Create new key'"
     },
     {
-      number: 4,
+      number: 5,
       title: "Copier votre clé API",
       description: "⚠️ IMPORTANT : Copiez immédiatement votre clé API et gardez-la en sécurité. Elle ne sera plus visible après cette étape !",
-      placeholder: "screenshot-step4.png",
+      placeholder: "screenshot-step5.png",
       placeholderText: "Capture d'écran montrant la clé API à copier"
     },
     {
-      number: 5,
+      number: 6,
       title: "Coller dans l'application",
       description: "Retournez sur la page de configuration de l'application et collez votre clé API dans le champ prévu, puis cliquez sur 'Valider'.",
-      placeholder: "screenshot-step5.png",
+      placeholder: "screenshot-step6.png",
       placeholderText: "Capture d'écran du champ de saisie de l'application"
     }
   ];

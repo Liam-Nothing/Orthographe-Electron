@@ -65,16 +65,28 @@ function Debug({ onClose }) {
       window.electronAPI.onUpdateAvailable?.((data) => {
         setUpdateStatus('available');
         setUpdateInfo(data);
+        addLog('success', `Mise à jour disponible: v${data.version}`);
       });
 
       window.electronAPI.onUpdateDownloaded?.((data) => {
         setUpdateStatus('downloaded');
         setUpdateInfo(data);
+        addLog('success', `Mise à jour téléchargée: v${data.version}`);
       });
 
       window.electronAPI.onDownloadProgress?.((percent) => {
         setUpdateStatus('downloading');
         setDownloadProgress(percent);
+      });
+
+      window.electronAPI.onUpdateNotAvailable?.(() => {
+        setUpdateStatus('idle');
+        addLog('info', 'Aucune mise à jour disponible');
+      });
+
+      window.electronAPI.onUpdateError?.((error) => {
+        setUpdateStatus('error');
+        addLog('error', `Erreur update: ${error}`);
       });
     }
   }, []);

@@ -581,10 +581,16 @@ autoUpdater.on('update-available', (info) => {
 
 autoUpdater.on('update-not-available', () => {
   log.info('No update available');
+  if (mainWindow) {
+    mainWindow.webContents.send('update-not-available');
+  }
 });
 
 autoUpdater.on('error', (err) => {
   log.error('Update error:', err);
+  if (mainWindow) {
+    mainWindow.webContents.send('update-error', err.message);
+  }
 });
 
 autoUpdater.on('download-progress', (progressObj) => {

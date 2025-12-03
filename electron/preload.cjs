@@ -66,6 +66,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const subscription = (event, percent) => callback(percent);
     ipcRenderer.on('download-progress', subscription);
     return () => ipcRenderer.removeListener('download-progress', subscription);
+  },
+  
+  onUpdateNotAvailable: (callback) => {
+    const subscription = () => callback();
+    ipcRenderer.on('update-not-available', subscription);
+    return () => ipcRenderer.removeListener('update-not-available', subscription);
+  },
+  
+  onUpdateError: (callback) => {
+    const subscription = (event, error) => callback(error);
+    ipcRenderer.on('update-error', subscription);
+    return () => ipcRenderer.removeListener('update-error', subscription);
   }
 });
 

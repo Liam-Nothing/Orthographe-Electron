@@ -39,11 +39,12 @@ export default [
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
       
-      // JavaScript - désactiver temporairement no-unused-vars pour les imports JSX
+      // JavaScript - ignorer les variables prefixées par _
       'no-unused-vars': ['warn', { 
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
-        ignoreRestSiblings: true 
+        ignoreRestSiblings: true,
+        caughtErrors: 'none'
       }],
       'no-console': 'off',
       'prefer-const': 'warn',

@@ -21,38 +21,38 @@ function Home() {
   const [model, setModel] = useState('mistral-large-latest');
 
   useEffect(() => {
-    loadData();
+    const initData = async () => {
+      if (window.electronAPI) {
+        const [cats, key, mdl, draft, draftResult] = await Promise.all([
+          window.electronAPI.getCategories(),
+          window.electronAPI.getApiKey(),
+          window.electronAPI.getModel(),
+          window.electronAPI.getDraft(),
+          window.electronAPI.getDraftResult()
+        ]);
+        setCategories(cats.filter(c => c.enabled));
+        setApiKey(key);
+        setModel(mdl);
+        
+        // Charger le brouillon sauvegardé
+        if (draft) {
+          setText(draft);
+        }
+        
+        // Charger le résultat sauvegardé
+        if (draftResult) {
+          setResult(draftResult);
+        }
+        
+        // Sélectionner la première catégorie par défaut
+        const enabledCats = cats.filter(c => c.enabled);
+        if (enabledCats.length > 0) {
+          setSelectedCategory(enabledCats[0]);
+        }
+      }
+    };
+    initData();
   }, []);
-
-  const loadData = async () => {
-    if (window.electronAPI) {
-      const [cats, key, mdl, draft, draftResult] = await Promise.all([
-        window.electronAPI.getCategories(),
-        window.electronAPI.getApiKey(),
-        window.electronAPI.getModel(),
-        window.electronAPI.getDraft(),
-        window.electronAPI.getDraftResult()
-      ]);
-      setCategories(cats.filter(c => c.enabled));
-      setApiKey(key);
-      setModel(mdl);
-      
-      // Charger le brouillon sauvegardé
-      if (draft) {
-        setText(draft);
-      }
-      
-      // Charger le résultat sauvegardé
-      if (draftResult) {
-        setResult(draftResult);
-      }
-      
-      // Sélectionner la première catégorie par défaut
-      if (cats.length > 0 && !selectedCategory) {
-        setSelectedCategory(cats.find(c => c.enabled) || cats[0]);
-      }
-    }
-  };
 
   // Sauvegarder le brouillon quand le texte change
   const handleTextChange = (newText) => {

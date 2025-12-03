@@ -129,7 +129,7 @@ export async function validateApiKey(apiKey) {
 
     return { valid: false, error: `Erreur de validation: ${response.status}` };
 
-  } catch (error) {
+  } catch (_error) {
     return { valid: false, error: 'Impossible de valider la clé. Vérifiez votre connexion.' };
   }
 }

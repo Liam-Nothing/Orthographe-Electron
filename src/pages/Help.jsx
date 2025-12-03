@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, Key, CheckCircle, Copy, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Key, CheckCircle, AlertCircle } from 'lucide-react';
 
 function Help({ onBack }) {
   const openExternal = (url) => {

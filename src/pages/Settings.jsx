@@ -73,7 +73,7 @@ function Settings() {
         setHasChanges(false);
         setMessage({ type: 'success', text: 'Paramètres enregistrés !' });
       }
-    } catch (error) {
+    } catch (_error) {
       setMessage({ type: 'error', text: 'Erreur lors de la sauvegarde' });
     }
 

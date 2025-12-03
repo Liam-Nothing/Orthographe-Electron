@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Clock, Search, Filter, ChevronDown, ChevronUp, AlertCircle, CheckCircle, BookOpen, Lightbulb, Trash2, Calendar } from 'lucide-react';
+import { Clock, Search, ChevronDown, ChevronUp, AlertCircle, CheckCircle, BookOpen, Lightbulb, Calendar } from 'lucide-react';
 
 function History() {
   const [history, setHistory] = useState([]);
@@ -16,22 +16,7 @@ function History() {
   }, []);
 
   useEffect(() => {
-    applyFilters();
-  }, [history, searchTerm, filterType, filterCategory]);
-
-  const loadData = async () => {
-    if (window.electronAPI) {
-      const [hist, cats] = await Promise.all([
-        window.electronAPI.getErrorHistory(),
-        window.electronAPI.getCategories()
-      ]);
-      setHistory(hist || []);
-      setCategories(cats || []);
-    }
-    setIsLoading(false);
-  };
-
-  const applyFilters = () => {
+    // Appliquer les filtres quand les dépendances changent
     let filtered = [...history];
 
     // Filtre par recherche
@@ -61,6 +46,18 @@ function History() {
     }
 
     setFilteredHistory(filtered);
+  }, [history, searchTerm, filterType, filterCategory]);
+
+  const loadData = async () => {
+    if (window.electronAPI) {
+      const [hist, cats] = await Promise.all([
+        window.electronAPI.getErrorHistory(),
+        window.electronAPI.getCategories()
+      ]);
+      setHistory(hist || []);
+      setCategories(cats || []);
+    }
+    setIsLoading(false);
   };
 
   const toggleExpand = (id) => {
@@ -70,13 +67,6 @@ function History() {
     }));
   };
 
-  const handleDeleteItem = async (id) => {
-    if (window.confirm('Supprimer cette correction de l\'historique ?')) {
-      const newHistory = history.filter(item => item.id !== id);
-      setHistory(newHistory);
-      // Note: On devrait aussi mettre à jour le store, mais pour simplifier on ne le fait pas ici
-    }
-  };
 
   const getMistakeTypeColor = (type) => {
     const colors = {

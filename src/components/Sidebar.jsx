@@ -34,10 +34,10 @@ function Sidebar({ currentPage, onNavigate }) {
               <li key={item.id}>
                 <button
                   onClick={() => onNavigate(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors duration-150 ${
                     isActive
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-500/30'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border-purple-500/30'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800 border-transparent'
                   }`}
                 >
                   <Icon className={`w-5 h-5 ${isActive ? 'text-purple-400' : ''}`} />

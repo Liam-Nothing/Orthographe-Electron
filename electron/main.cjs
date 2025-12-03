@@ -3,53 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
-const Store = require('electron-store');
-
-// --- CONFIGURATION STORE ---
-const store = new Store({
-  name: 'orthographe-config',
-  defaults: {
-    mistralApiKey: '',
-    mistralModel: 'mistral-large-latest',
-    isConfigured: false,
-    categories: [
-      {
-        id: 'email',
-        name: 'Email',
-        icon: 'Mail',
-        enabled: true,
-        preprompt: "Tu es un assistant spécialisé dans la correction d'emails professionnels. Corrige l'orthographe, la grammaire et améliore la formulation pour un contexte professionnel. Assure-toi que le ton est approprié pour une communication par email."
-      },
-      {
-        id: 'academic',
-        name: 'Académique',
-        icon: 'GraduationCap',
-        enabled: true,
-        preprompt: "Tu es un assistant spécialisé dans la correction de textes académiques. Corrige l'orthographe et la grammaire tout en maintenant un style académique formel. Vérifie la cohérence et la clarté des arguments."
-      },
-      {
-        id: 'casual',
-        name: 'Informel',
-        icon: 'MessageCircle',
-        enabled: true,
-        preprompt: "Tu es un assistant pour la correction de textes informels (messages, réseaux sociaux, etc.). Corrige les fautes d'orthographe tout en préservant le ton décontracté et le style personnel de l'auteur."
-      },
-      {
-        id: 'professional',
-        name: 'Professionnel',
-        icon: 'Briefcase',
-        enabled: true,
-        preprompt: "Tu es un assistant pour la correction de documents professionnels (rapports, présentations, etc.). Corrige l'orthographe et la grammaire, améliore la clarté et assure un ton professionnel approprié."
-      }
-    ],
-    errorHistory: [],
-    statistics: {
-      totalCorrections: 0,
-      totalErrors: 0,
-      errorTypes: {}
-    }
-  }
-});
 
 // --- CONFIGURATION LOGS ---
 log.transports.file.level = 'info';
@@ -58,6 +11,60 @@ autoUpdater.autoDownload = false;
 autoUpdater.requestHeaders = {};
 
 let mainWindow;
+let store;
+
+// Defaults pour le store
+const storeDefaults = {
+  mistralApiKey: '',
+  mistralModel: 'mistral-large-latest',
+  isConfigured: false,
+  categories: [
+    {
+      id: 'email',
+      name: 'Email',
+      icon: 'Mail',
+      enabled: true,
+      preprompt: "Tu es un assistant spécialisé dans la correction d'emails professionnels. Corrige l'orthographe, la grammaire et améliore la formulation pour un contexte professionnel. Assure-toi que le ton est approprié pour une communication par email."
+    },
+    {
+      id: 'academic',
+      name: 'Académique',
+      icon: 'GraduationCap',
+      enabled: true,
+      preprompt: "Tu es un assistant spécialisé dans la correction de textes académiques. Corrige l'orthographe et la grammaire tout en maintenant un style académique formel. Vérifie la cohérence et la clarté des arguments."
+    },
+    {
+      id: 'casual',
+      name: 'Informel',
+      icon: 'MessageCircle',
+      enabled: true,
+      preprompt: "Tu es un assistant pour la correction de textes informels (messages, réseaux sociaux, etc.). Corrige les fautes d'orthographe tout en préservant le ton décontracté et le style personnel de l'auteur."
+    },
+    {
+      id: 'professional',
+      name: 'Professionnel',
+      icon: 'Briefcase',
+      enabled: true,
+      preprompt: "Tu es un assistant pour la correction de documents professionnels (rapports, présentations, etc.). Corrige l'orthographe et la grammaire, améliore la clarté et assure un ton professionnel approprié."
+    }
+  ],
+  errorHistory: [],
+  statistics: {
+    totalCorrections: 0,
+    totalErrors: 0,
+    errorTypes: {}
+  }
+};
+
+// --- INITIALISATION DU STORE (async pour ES module) ---
+async function initStore() {
+  const Store = (await import('electron-store')).default;
+  store = new Store({
+    name: 'orthographe-config',
+    defaults: storeDefaults
+  });
+  return store;
+}
 
 // --- CRÉATION DU MENU ---
 function createMenu() {
@@ -179,7 +186,7 @@ function createWindow() {
       contextIsolation: true,
       sandbox: true,
       preload: path.join(__dirname, 'preload.cjs'),
-      devTools: isDev,
+      devTools: true,
       webSecurity: true,
       allowRunningInsecureContent: false
     },
@@ -200,160 +207,167 @@ function createWindow() {
     mainWindow.show();
     
     // Envoyer l'état de configuration au renderer
-    mainWindow.webContents.send('config-status', {
-      isConfigured: store.get('isConfigured'),
-      version: app.getVersion()
-    });
+    if (store) {
+      mainWindow.webContents.send('config-status', {
+        isConfigured: store.get('isConfigured'),
+        version: app.getVersion()
+      });
+    }
   });
 }
 
 // --- IPC HANDLERS ---
+function setupIpcHandlers() {
+  // Vérifier si l'app est configurée
+  ipcMain.handle('check-config', async () => {
+    return {
+      isConfigured: store.get('isConfigured'),
+      hasApiKey: !!store.get('mistralApiKey')
+    };
+  });
 
-// Vérifier si l'app est configurée
-ipcMain.handle('check-config', async () => {
-  return {
-    isConfigured: store.get('isConfigured'),
-    hasApiKey: !!store.get('mistralApiKey')
-  };
-});
+  // Sauvegarder la clé API
+  ipcMain.handle('save-api-key', async (event, apiKey) => {
+    try {
+      store.set('mistralApiKey', apiKey);
+      store.set('isConfigured', true);
+      log.info('API key saved successfully');
+      return { success: true };
+    } catch (error) {
+      log.error('Error saving API key:', error);
+      return { success: false, error: error.message };
+    }
+  });
 
-// Sauvegarder la clé API
-ipcMain.handle('save-api-key', async (event, apiKey) => {
-  try {
-    store.set('mistralApiKey', apiKey);
-    store.set('isConfigured', true);
-    log.info('API key saved successfully');
+  // Récupérer la clé API
+  ipcMain.handle('get-api-key', async () => {
+    return store.get('mistralApiKey');
+  });
+
+  // Récupérer le modèle Mistral
+  ipcMain.handle('get-model', async () => {
+    return store.get('mistralModel');
+  });
+
+  // Sauvegarder le modèle
+  ipcMain.handle('save-model', async (event, model) => {
+    store.set('mistralModel', model);
     return { success: true };
-  } catch (error) {
-    log.error('Error saving API key:', error);
-    return { success: false, error: error.message };
-  }
-});
+  });
 
-// Récupérer la clé API
-ipcMain.handle('get-api-key', async () => {
-  return store.get('mistralApiKey');
-});
+  // Récupérer les catégories
+  ipcMain.handle('get-categories', async () => {
+    return store.get('categories');
+  });
 
-// Récupérer le modèle Mistral
-ipcMain.handle('get-model', async () => {
-  return store.get('mistralModel');
-});
+  // Sauvegarder les catégories
+  ipcMain.handle('save-categories', async (event, categories) => {
+    store.set('categories', categories);
+    return { success: true };
+  });
 
-// Sauvegarder le modèle
-ipcMain.handle('save-model', async (event, model) => {
-  store.set('mistralModel', model);
-  return { success: true };
-});
+  // Ajouter une catégorie
+  ipcMain.handle('add-category', async (event, category) => {
+    const categories = store.get('categories');
+    categories.push(category);
+    store.set('categories', categories);
+    return { success: true, categories };
+  });
 
-// Récupérer les catégories
-ipcMain.handle('get-categories', async () => {
-  return store.get('categories');
-});
+  // Supprimer une catégorie
+  ipcMain.handle('delete-category', async (event, categoryId) => {
+    const categories = store.get('categories').filter(c => c.id !== categoryId);
+    store.set('categories', categories);
+    return { success: true, categories };
+  });
 
-// Sauvegarder les catégories
-ipcMain.handle('save-categories', async (event, categories) => {
-  store.set('categories', categories);
-  return { success: true };
-});
+  // Mettre à jour une catégorie
+  ipcMain.handle('update-category', async (event, updatedCategory) => {
+    const categories = store.get('categories').map(c => 
+      c.id === updatedCategory.id ? updatedCategory : c
+    );
+    store.set('categories', categories);
+    return { success: true, categories };
+  });
 
-// Ajouter une catégorie
-ipcMain.handle('add-category', async (event, category) => {
-  const categories = store.get('categories');
-  categories.push(category);
-  store.set('categories', categories);
-  return { success: true, categories };
-});
+  // Récupérer l'historique des erreurs
+  ipcMain.handle('get-error-history', async () => {
+    return store.get('errorHistory');
+  });
 
-// Supprimer une catégorie
-ipcMain.handle('delete-category', async (event, categoryId) => {
-  const categories = store.get('categories').filter(c => c.id !== categoryId);
-  store.set('categories', categories);
-  return { success: true, categories };
-});
-
-// Mettre à jour une catégorie
-ipcMain.handle('update-category', async (event, updatedCategory) => {
-  const categories = store.get('categories').map(c => 
-    c.id === updatedCategory.id ? updatedCategory : c
-  );
-  store.set('categories', categories);
-  return { success: true, categories };
-});
-
-// Récupérer l'historique des erreurs
-ipcMain.handle('get-error-history', async () => {
-  return store.get('errorHistory');
-});
-
-// Ajouter une correction à l'historique
-ipcMain.handle('add-correction', async (event, correction) => {
-  const history = store.get('errorHistory');
-  history.unshift(correction); // Ajouter au début
-  
-  // Garder seulement les 500 dernières corrections
-  if (history.length > 500) {
-    history.pop();
-  }
-  
-  store.set('errorHistory', history);
-  
-  // Mettre à jour les statistiques
-  const stats = store.get('statistics');
-  stats.totalCorrections++;
-  
-  if (correction.mistakes && correction.mistakes.length > 0) {
-    stats.totalErrors += correction.mistakes.length;
+  // Ajouter une correction à l'historique
+  ipcMain.handle('add-correction', async (event, correction) => {
+    const history = store.get('errorHistory');
+    history.unshift(correction);
     
-    correction.mistakes.forEach(mistake => {
-      const type = mistake.type || 'autre';
-      stats.errorTypes[type] = (stats.errorTypes[type] || 0) + 1;
-    });
-  }
-  
-  store.set('statistics', stats);
-  
-  return { success: true };
-});
+    if (history.length > 500) {
+      history.pop();
+    }
+    
+    store.set('errorHistory', history);
+    
+    const stats = store.get('statistics');
+    stats.totalCorrections++;
+    
+    if (correction.mistakes && correction.mistakes.length > 0) {
+      stats.totalErrors += correction.mistakes.length;
+      
+      correction.mistakes.forEach(mistake => {
+        const type = mistake.type || 'autre';
+        stats.errorTypes[type] = (stats.errorTypes[type] || 0) + 1;
+      });
+    }
+    
+    store.set('statistics', stats);
+    
+    return { success: true };
+  });
 
-// Récupérer les statistiques
-ipcMain.handle('get-statistics', async () => {
-  return store.get('statistics');
-});
+  // Récupérer les statistiques
+  ipcMain.handle('get-statistics', async () => {
+    return store.get('statistics');
+  });
 
-// Réinitialiser les données
-ipcMain.handle('reset-data', async (event, options = {}) => {
-  if (options.history) {
-    store.set('errorHistory', []);
-  }
-  if (options.statistics) {
-    store.set('statistics', {
-      totalCorrections: 0,
-      totalErrors: 0,
-      errorTypes: {}
-    });
-  }
-  if (options.categories) {
-    store.reset('categories');
-  }
-  if (options.apiKey) {
-    store.set('mistralApiKey', '');
-    store.set('isConfigured', false);
-  }
-  return { success: true };
-});
+  // Réinitialiser les données
+  ipcMain.handle('reset-data', async (event, options = {}) => {
+    if (options.history) {
+      store.set('errorHistory', []);
+    }
+    if (options.statistics) {
+      store.set('statistics', {
+        totalCorrections: 0,
+        totalErrors: 0,
+        errorTypes: {}
+      });
+    }
+    if (options.categories) {
+      store.set('categories', storeDefaults.categories);
+    }
+    if (options.apiKey) {
+      store.set('mistralApiKey', '');
+      store.set('isConfigured', false);
+    }
+    return { success: true };
+  });
 
-// Récupérer toutes les données pour export
-ipcMain.handle('export-data', async () => {
-  return {
-    errorHistory: store.get('errorHistory'),
-    statistics: store.get('statistics'),
-    categories: store.get('categories')
-  };
-});
+  // Récupérer toutes les données pour export
+  ipcMain.handle('export-data', async () => {
+    return {
+      errorHistory: store.get('errorHistory'),
+      statistics: store.get('statistics'),
+      categories: store.get('categories')
+    };
+  });
+}
 
 // --- APP LIFECYCLE ---
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Initialiser le store avec import dynamique
+  await initStore();
+  
+  // Setup IPC handlers après l'initialisation du store
+  setupIpcHandlers();
+  
   createMenu();
   createWindow();
 

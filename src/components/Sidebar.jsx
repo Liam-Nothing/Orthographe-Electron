@@ -1,8 +1,9 @@
-import { PenTool, LayoutDashboard, FolderOpen, Settings, Sparkles, ExternalLink } from 'lucide-react';
+import { PenTool, LayoutDashboard, History, FolderOpen, Settings, Sparkles, ExternalLink } from 'lucide-react';
 
 const navItems = [
   { id: 'home', label: 'Correction', icon: PenTool },
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'history', label: 'Historique', icon: History },
   { id: 'categories', label: 'Catégories', icon: FolderOpen },
   { id: 'settings', label: 'Paramètres', icon: Settings },
 ];

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Setup from './pages/Setup';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
+import History from './pages/History';
 import Categories from './pages/Categories';
 import Settings from './pages/Settings';
 import Sidebar from './components/Sidebar';
@@ -59,6 +60,8 @@ function App() {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard />;
+      case 'history':
+        return <History />;
       case 'categories':
         return <Categories />;
       case 'settings':

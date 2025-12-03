@@ -115,8 +115,17 @@ function createMenu() {
           }
         },
         {
-          label: 'Catégories',
+          label: 'Historique',
           accelerator: 'Ctrl+3',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('navigate-to', 'history');
+            }
+          }
+        },
+        {
+          label: 'Catégories',
+          accelerator: 'Ctrl+4',
           click: () => {
             if (mainWindow) {
               mainWindow.webContents.send('navigate-to', 'categories');

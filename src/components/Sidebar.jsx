@@ -65,7 +65,7 @@ function Sidebar({ currentPage, onNavigate }) {
           <img 
             src="/nea-logo.png" 
             alt="NothingElse.App" 
-            className="w-6 h-6 rounded"
+            className="w-6 h-6 rounded bg-white p-0.5"
           />
           <div className="flex-1">
             <p className="text-xs text-slate-500">Développé par</p>

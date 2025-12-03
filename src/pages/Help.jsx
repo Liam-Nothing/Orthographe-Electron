@@ -152,7 +152,7 @@ function Help({ onBack }) {
                   {step.placeholder && (
                     <div className="rounded-xl overflow-hidden border border-slate-700">
                       <img 
-                        src={`/${step.placeholder}`}
+                        src={`${import.meta.env.BASE_URL}${step.placeholder}`}
                         alt={step.placeholderText}
                         className="w-full h-auto"
                       />

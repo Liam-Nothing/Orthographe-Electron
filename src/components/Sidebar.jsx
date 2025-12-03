@@ -80,7 +80,7 @@ function Sidebar({ currentPage, onNavigate, isCollapsed, onToggle }) {
           className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} ${isCollapsed ? 'px-2 py-2' : 'px-4 py-2'} rounded-xl hover:bg-slate-800/50 transition-colors group text-left`}
         >
           <img 
-            src="/nea-logo.png" 
+            src={`${import.meta.env.BASE_URL}nea-logo.png`} 
             alt="NothingElse.App" 
             className="w-6 h-6 rounded bg-white p-0.5 flex-shrink-0"
           />

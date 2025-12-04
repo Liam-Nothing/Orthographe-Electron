@@ -240,6 +240,46 @@ Les contributions sont les bienvenues ! N'hésitez pas à :
 
 ---
 
+## 🔐 Code Signing Policy
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+### Team Roles
+
+- **Committers and Reviewers**: [Liam-Nothing](https://github.com/Liam-Nothing)
+- **Approvers**: [Liam-Nothing](https://github.com/Liam-Nothing) (Repository Owner)
+
+---
+
+## 🔒 Privacy Policy
+
+### Data Collection
+
+This application collects and processes the following data:
+
+1. **Text you submit for correction**: Your text is sent to Mistral AI's API for processing. Mistral AI may retain this data according to their [privacy policy](https://mistral.ai/terms/).
+
+2. **Local storage**: Your correction history, statistics, and preferences are stored **locally on your device** using `electron-store`. This data never leaves your computer unless you explicitly export it.
+
+3. **API Key**: Your Mistral API key is stored locally and encrypted. It is only used to authenticate requests to Mistral AI.
+
+### Data Transfer
+
+- **Mistral AI**: Text submitted for correction is sent to Mistral AI servers for processing. No other third-party services receive your data.
+- **GitHub**: The application checks for updates via GitHub's public API. No personal data is transmitted.
+
+### Your Rights
+
+- All local data can be deleted through the application settings (Settings → Reset Data)
+- You can opt-out of Mistral AI's data training by contacting [privacy@mistral.ai](mailto:privacy@mistral.ai)
+- Uninstalling the application removes all local data
+
+### Contact
+
+For privacy-related inquiries, please open an issue on the [GitHub repository](https://github.com/Liam-Nothing/Orthographe-Electron/issues).
+
+---
+
 ## 📄 License
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.

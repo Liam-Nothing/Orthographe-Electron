@@ -1,4 +1,4 @@
-import { ArrowLeft, ExternalLink, Key, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Key, CheckCircle, AlertCircle, Shield } from 'lucide-react';
 
 function Help({ onBack }) {
   const openExternal = (url) => {
@@ -99,7 +99,7 @@ function Help({ onBack }) {
         </div>
 
         {/* Info box */}
-        <div className="mb-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+        <div className="mb-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
             <div>
@@ -109,6 +109,43 @@ function Help({ onBack }) {
                 comme Mistral Large pour des corrections de haute qualité. Les tarifs sont très 
                 abordables pour un usage personnel.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy info box */}
+        <div className="mb-8 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+          <div className="flex items-start gap-3">
+            <Shield className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-amber-300 font-medium">Confidentialité de vos données</p>
+              <p className="text-slate-400 text-sm mt-1 mb-2">
+                <strong className="text-amber-200">Plan gratuit (Experiment) :</strong> Par défaut, Mistral peut utiliser vos données 
+                pour entraîner ses modèles. Vous pouvez vous désinscrire à tout moment.
+              </p>
+              <p className="text-slate-400 text-sm mb-2">
+                <strong className="text-amber-200">Plan payant (Scale) :</strong> Vos données ne sont pas utilisées pour l'entraînement.
+              </p>
+              <div className="mt-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+                <p className="text-slate-300 text-sm font-medium mb-1">💡 Pour refuser l'entraînement sur vos données :</p>
+                <p className="text-slate-400 text-sm">
+                  Envoyez un email à{' '}
+                  <button
+                    onClick={() => openExternal('mailto:privacy@mistral.ai')}
+                    className="text-amber-400 hover:text-amber-300 underline"
+                  >
+                    privacy@mistral.ai
+                  </button>
+                  {' '}en indiquant que vous vous opposez à l'utilisation de vos données pour l'entraînement des modèles.
+                </p>
+              </div>
+              <button
+                onClick={() => openExternal('https://help.mistral.ai/en/articles/347617-do-you-use-my-user-data-to-train-your-artificial-intelligence-models')}
+                className="inline-flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors mt-3"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                En savoir plus sur la politique de données
+              </button>
             </div>
           </div>
         </div>
